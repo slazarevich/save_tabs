@@ -1,0 +1,13 @@
+{
+  "name": "SaveTabs",
+  "description": "Store browser tabs when you want to see them later!",
+  "browser_action": {
+    "default_popup": "index.html"
+  },
+  "version": "0.0.1",
+  "manifest_version": 2,
+  "permissions": [
+    "tabs",
+    "storage"
+  ]
+}
