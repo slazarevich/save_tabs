@@ -1,0 +1,25 @@
+.tabBlockLabels {
+    border: 1px solid #191919;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    display: inline-block;
+    width: 485px;
+    height: 15px;
+    background-color: white;
+}
+
+#checkboxes input[type=checkbox] {
+    display: none;
+}
+
+#checkboxes input[type=checkbox]:checked+.tabBlockLabels {
+    border: 1px solid #009e06;
+    background-color: rgb(75, 206, 0);
+}
+
+body {
+    width: 500px;
+    background: linear-gradient(#e66465, #9198e5);
+}
