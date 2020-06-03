@@ -19,7 +19,7 @@ function showNameField() {
     nameField.id = 'nameField';
     nameField.type = 'text';
     nameField.placeholder = 'Enter name of the tab set';
-    return nameField
+    return nameField;
 }
 
 
@@ -38,9 +38,31 @@ function updateTabSets() {
 function openTabs(tabSetsElements) {
     let tabSetsNames = [];
     tabSetsElements.forEach(function (element) {
-        tabSetsNames.push(element.value)
+        tabSetsNames.push(element.value);
     });
     openTabSets(tabSetsNames);
+}
+
+
+function createUnorderedList(list, bulletChar) {
+  let result = "";
+  for (let i = 0; i<list.length; ++i) {
+    result += bulletChar + " " + list[i] + "\n";
+  }
+  return result;
+}
+
+
+function removeTabs(tabSetsElements) {
+    let tabSetsNames = [];
+    tabSetsElements.forEach(function (element) {
+        tabSetsNames.push(element.value);
+    });
+    let removeTabs = confirm('Do you want to remove these tabs: \n' + createUnorderedList(tabSetsNames, '-'));
+    if (removeTabs) {
+        deleteTabSets(tabSetsNames);
+        updateTabSets();
+    }
 }
 
 
@@ -53,7 +75,7 @@ window.onload = function () {
         chrome.tabs.query({currentWindow: true}, function (tabs) {
             let urls = [];
             tabs.forEach(function (tab) {
-                urls.push(tab.url)
+                urls.push(tab.url);
             });
 
             let nameField = showNameField();
@@ -88,5 +110,15 @@ window.onload = function () {
         tabsets = Array.from(tabsets);
         let checkedTabsets = tabsets.filter(tabset => tabset.checked === true);
         openTabs(checkedTabsets);
-    }
+    };
+
+    document.getElementById('remove').onclick = function () {
+
+        let tabsets = document.getElementsByName('tabset');
+        tabsets = Array.from(tabsets);
+        let checkedTabsets = tabsets.filter(tabset => tabset.checked === true);
+        if (checkedTabsets.length > 0) {
+            removeTabs(checkedTabsets);
+        }
+    };
 };

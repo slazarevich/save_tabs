@@ -15,8 +15,9 @@
 }
 
 #checkboxes input[type=checkbox]:checked+.tabBlockLabels {
-    border: 1px solid #009e06;
-    background-color: rgb(75, 206, 0);
+    border: 1px solid #00859e;
+    background-color: rgb(0, 100, 206);
+    color: white;
 }
 
 body {
