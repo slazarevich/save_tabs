@@ -4,7 +4,7 @@
   "browser_action": {
     "default_popup": "index.html"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "manifest_version": 2,
   "permissions": [
     "tabs",
