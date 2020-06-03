@@ -13,6 +13,7 @@ function addTabSet(name) {
     return [tabSetInput, tabSetLabel]
 }
 
+
 function showNameField() {
     let nameField = document.createElement('input');
     nameField.id = 'nameField';
@@ -21,26 +22,27 @@ function showNameField() {
     return nameField
 }
 
+
 function hideNameField(nameFieldId) {
     let nameField = document.getElementById(nameFieldId);
     nameField.remove();
 }
 
+
 function updateTabSets() {
     document.getElementById('checkboxes').innerHTML = '';
-    chrome.storage.sync.get(null, function (items) {
-        let allTabSetKeys = Object.keys(items);
-        allTabSetKeys.forEach(function (key) {
-            chrome.storage.sync.get([key], function (tabSet) {
-                let tabSetResult = addTabSet(tabSet[key].name);
-                let tabSetInput = tabSetResult[0];
-                let tabSetLabel = tabSetResult[1];
-                document.getElementById('checkboxes').appendChild(tabSetInput);
-                document.getElementById('checkboxes').appendChild(tabSetLabel);
-            })
-        });
-    });
+    renderTabSets();
 }
+
+
+function openTabs(tabSetsElements) {
+    let tabSetsNames = [];
+    tabSetsElements.forEach(function (element) {
+        tabSetsNames.push(element.value)
+    });
+    openTabSets(tabSetsNames);
+}
+
 
 window.onload = function () {
 
@@ -70,9 +72,8 @@ window.onload = function () {
                         urls: urls
                     };
 
-                    chrome.storage.sync.set({[tabSetName]: tabSet}, function () {
-                        console.log('Saved urls are: ' + tabSet);
-                    });
+                    saveTabSet(tabSet);
+                    console.log('Saved tabs are: ' + tabSet.urls);
                     updateTabSets();
                 }
             });
@@ -86,14 +87,6 @@ window.onload = function () {
         let tabsets = document.getElementsByName('tabset');
         tabsets = Array.from(tabsets);
         let checkedTabsets = tabsets.filter(tabset => tabset.checked === true);
-
-        checkedTabsets.forEach(function (tabset) {
-           let tabSetName = tabset.value;
-           chrome.storage.sync.get([tabSetName], function (result) {
-                result[tabSetName].urls.forEach(function (url) {
-                chrome.tabs.create({url: url})
-                })
-            })
-        });
+        openTabs(checkedTabsets);
     }
 };
