@@ -97,7 +97,11 @@ window.onload = function () {
                 urls.push(tab.url);
             });
 
-            let nameField = showNameField();
+            let nameField;
+
+            if (!document.getElementById('nameField')) {
+                nameField = showNameField();
+            }
             document.getElementById('checkboxes').appendChild(nameField);
             let tabSetName;
             let tabSet;
