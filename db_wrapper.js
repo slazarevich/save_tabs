@@ -30,7 +30,15 @@ function saveTabSet(tabSet) {
         };
 
         let tabSetName = tabSet.name;
-        store.add({tabSetName: tabSetName, tabs: tabSet});
+        let checkIfExistsRequest = index.getKey(tabSetName);
+
+        checkIfExistsRequest.onsuccess = function (e) {
+            let recordKey = checkIfExistsRequest.result;
+            if (recordKey !== undefined) {
+                store.delete(recordKey);
+            }
+            store.add({tabSetName: tabSetName, tabs: tabSet});
+        };
 
         tx.oncomplete = function () {
             db.close();

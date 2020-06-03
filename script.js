@@ -79,6 +79,7 @@ window.onload = function () {
             });
 
             let nameField = showNameField();
+            document.getElementById('checkboxes').appendChild(nameField);
             let tabSetName;
             let tabSet;
 
@@ -86,21 +87,40 @@ window.onload = function () {
                 if (event.key === 'Enter') {
                     event.preventDefault();
                     tabSetName = this.value;
-                    hideNameField('nameField');
+                    let existingElements = document.getElementsByName('tabset');
+                    let existingNames = [];
+                    existingElements.forEach(function (element) {
+                        existingNames.push(element.value);
+                    });
 
-                    tabSet = {
-                        name: tabSetName,
-                        created_at: new Date().toLocaleString(),
-                        urls: urls
-                    };
+                    let overwrite;
 
-                    saveTabSet(tabSet);
-                    console.log('Saved tabs are: ' + tabSet.urls);
-                    updateTabSets();
+                    if (existingNames.includes(tabSetName)) {
+                        overwrite = confirm('The tab set with this name already exists. ' +
+                            'Would you like to overwrite it?');
+                    }
+
+                    if (overwrite || !existingNames.includes(tabSetName)) {
+
+                                hideNameField('nameField');
+                                tabSet = {
+                                    name: tabSetName,
+                                    created_at: new Date().toLocaleString(),
+                                    urls: urls
+                                };
+                                saveTabSet(tabSet);
+                                console.log('Saved tabs are: ' + tabSet.urls);
+                                updateTabSets();
+
+                            }
+
+
+
+
                 }
             });
 
-            document.getElementById('checkboxes').appendChild(nameField);
+
         })
     };
 
