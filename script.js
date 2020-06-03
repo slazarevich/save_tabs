@@ -47,6 +47,7 @@ function hideNameField(nameFieldId) {
 function updateTabSets() {
     document.getElementById('checkboxes').innerHTML = '';
     renderTabSets();
+    showOnMultiple();
 }
 
 
