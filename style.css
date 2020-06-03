@@ -20,6 +20,12 @@
     color: white;
 }
 
+.display_on_multiple {
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    display: none;
+}
+
 body {
     width: 500px;
     background: linear-gradient(#e66465, #9198e5);

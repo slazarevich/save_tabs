@@ -97,7 +97,7 @@ function renderTabSets() {
 }
 
 
-function openTabSets(tabSetsNames) {
+function openTabSets(tabSetsNames, inSepWindows) {
     let request = window.indexedDB.open('SaveTabsDB', 1),
         db,
         tx,
@@ -122,11 +122,17 @@ function openTabSets(tabSetsNames) {
             if (cursor) {
                 let tabSet = cursor.value;
                 if (tabSetsNames.indexOf(tabSet.tabSetName) !== -1) {
+
                     let urls = tabSet.tabs.urls;
-                    urls.forEach(function (url) {
-                        // console.log(url);
-                        chrome.tabs.create({url: url});
-                    });
+
+                    if (tabSetsNames.length > 1 && inSepWindows) {
+                        chrome.windows.create({url: urls});
+                    } else {
+                        urls.forEach(function (url) {
+                            // console.log(url);
+                            chrome.tabs.create({url: url});
+                        });
+                    }
                 }
                 cursor.continue();
             }

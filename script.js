@@ -4,6 +4,8 @@ function addTabSet(name) {
     tabSetInput.value = name;
     tabSetInput.type = 'checkbox';
     tabSetInput.name = 'tabset';
+    tabSetInput.classList.add("tabBlocks");
+    tabSetInput.onclick = showOnMultiple;
 
     let tabSetLabel = document.createElement('label');
     tabSetLabel.htmlFor = name;
@@ -11,6 +13,19 @@ function addTabSet(name) {
     tabSetLabel.innerHTML = name;
 
     return [tabSetInput, tabSetLabel]
+}
+
+
+function showOnMultiple() {
+    let blocksToShow = [];
+    $('#checkboxes input:checked').each(function() {
+        blocksToShow.push($(this));
+    });
+    if (blocksToShow.length > 1) {
+        $(".display_on_multiple").show();
+    } else {
+        $(".display_on_multiple").hide();
+    }
 }
 
 
@@ -40,7 +55,10 @@ function openTabs(tabSetsElements) {
     tabSetsElements.forEach(function (element) {
         tabSetsNames.push(element.value);
     });
-    openTabSets(tabSetsNames);
+
+    let inSepWindows = $("#sep_windows").is(':checked');
+
+    openTabSets(tabSetsNames, inSepWindows);
 }
 
 
@@ -102,25 +120,18 @@ window.onload = function () {
 
                     if (overwrite || !existingNames.includes(tabSetName)) {
 
-                                hideNameField('nameField');
-                                tabSet = {
-                                    name: tabSetName,
-                                    created_at: new Date().toLocaleString(),
-                                    urls: urls
-                                };
-                                saveTabSet(tabSet);
-                                console.log('Saved tabs are: ' + tabSet.urls);
-                                updateTabSets();
-
-                            }
-
-
-
-
+                        hideNameField('nameField');
+                        tabSet = {
+                            name: tabSetName,
+                            created_at: new Date().toLocaleString(),
+                            urls: urls
+                        };
+                        saveTabSet(tabSet);
+                        console.log('Saved tabs are: ' + tabSet.urls);
+                        updateTabSets();
+                    }
                 }
             });
-
-
         })
     };
 
