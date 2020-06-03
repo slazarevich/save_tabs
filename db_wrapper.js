@@ -117,8 +117,46 @@ function openTabSets(tabSetsNames) {
                     let urls = tabSet.tabs.urls;
                     urls.forEach(function (url) {
                         // console.log(url);
-                        chrome.tabs.create({url: url})
+                        chrome.tabs.create({url: url});
                     });
+                }
+                cursor.continue();
+            }
+        };
+
+        tx.oncomplete = function () {
+            db.close();
+        };
+    };
+}
+
+
+function deleteTabSets(tabSetsNames) {
+    let request = window.indexedDB.open('SaveTabsDB', 1),
+        db,
+        tx,
+        store,
+        index;
+
+    request.onsuccess = function (e) {
+        db = request.result;
+        tx = db.transaction('TabSetsStore', 'readwrite');
+        store = tx.objectStore('TabSetsStore');
+        index = store.index('tabSetName');
+
+        db.onerror = function (e) {
+            console.log('ERROR' + e.target.error);
+        };
+
+        let getCursorRequest = store.openCursor();
+
+        getCursorRequest.onsuccess = function (e) {
+            let cursor = e.target.result;
+
+            if (cursor) {
+                let tabSet = cursor.value;
+                if (tabSetsNames.indexOf(tabSet.tabSetName) !== -1) {
+                    store.delete(cursor.key);
                 }
                 cursor.continue();
             }
