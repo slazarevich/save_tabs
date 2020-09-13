@@ -10,6 +10,11 @@
     background-color: white;
 }
 
+#tabset_list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
 #checkboxes input[type=checkbox] {
     display: none;
 }

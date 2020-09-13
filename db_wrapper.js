@@ -1,4 +1,7 @@
-window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+import {addTabSet} from "./script.js";
+
+let indexedDB = window.indexedDB;
+// indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
 
 function saveTabSet(tabSet) {
@@ -82,11 +85,8 @@ function renderTabSets() {
             let allTabSetsKeys = Object.keys(allTabSets);
 
             allTabSetsKeys.forEach(function (key) {
-                let tabSetResult = addTabSet(allTabSets[key].tabSetName);
-                let tabSetInput = tabSetResult[0];
-                let tabSetLabel = tabSetResult[1];
-                document.getElementById('checkboxes').appendChild(tabSetInput);
-                document.getElementById('checkboxes').appendChild(tabSetLabel);
+                let tabSetLi = addTabSet(allTabSets[key].tabSetName);
+                document.getElementById('tabset_list').appendChild(tabSetLi);
             });
         };
 
@@ -181,3 +181,5 @@ function deleteTabSets(tabSetsNames) {
         };
     };
 }
+
+export { saveTabSet , renderTabSets, openTabSets, deleteTabSets };

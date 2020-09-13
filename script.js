@@ -1,3 +1,7 @@
+import Sortable from './libraries/sortable.esm.js';
+import {deleteTabSets, openTabSets, renderTabSets, saveTabSet} from "./db_wrapper.js";
+
+
 function addTabSet(name) {
     let tabSetInput = document.createElement('input');
     tabSetInput.id = name;
@@ -5,20 +9,24 @@ function addTabSet(name) {
     tabSetInput.type = 'checkbox';
     tabSetInput.name = 'tabset';
     tabSetInput.classList.add("tabBlocks");
-    tabSetInput.onclick = showOnMultiple;
 
     let tabSetLabel = document.createElement('label');
     tabSetLabel.htmlFor = name;
     tabSetLabel.classList.add("tabBlockLabels");
     tabSetLabel.innerHTML = name;
 
-    return [tabSetInput, tabSetLabel]
+    let tabSetLi = document.createElement('li');
+    tabSetLi.innerHTML += tabSetInput.outerHTML + tabSetLabel.outerHTML;
+    tabSetLi.onclick = showOnMultiple;
+
+    return tabSetLi;
 }
 
+export { addTabSet };
 
 function showOnMultiple() {
     let blocksToShow = [];
-    $('#checkboxes input:checked').each(function() {
+    $('#tabset_list li input:checked').each(function() {
         blocksToShow.push($(this));
     });
     if (blocksToShow.length > 1) {
@@ -45,9 +53,11 @@ function hideNameField(nameFieldId) {
 
 
 function updateTabSets() {
-    document.getElementById('checkboxes').innerHTML = '';
+    let tabSetList = document.getElementById('tabset_list');
+    tabSetList.innerHTML = '';
     renderTabSets();
     showOnMultiple();
+    return tabSetList;
 }
 
 
@@ -77,7 +87,7 @@ function removeTabs(tabSetsElements) {
     tabSetsElements.forEach(function (element) {
         tabSetsNames.push(element.value);
     });
-    let removeTabs = confirm('Do you want to remove these tabs: \n' + createUnorderedList(tabSetsNames, '-'));
+    let removeTabs = confirm('Do you want to remove these tabsets? \n' + createUnorderedList(tabSetsNames, '-'));
     if (removeTabs) {
         deleteTabSets(tabSetsNames);
         updateTabSets();
@@ -87,7 +97,8 @@ function removeTabs(tabSetsElements) {
 
 window.onload = function () {
 
-    updateTabSets();
+    let tabSetList = updateTabSets();
+    Sortable.create(tabSetList, {animation: 150});
 
     document.getElementById('save').onclick = function () {
 
